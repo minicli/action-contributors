@@ -1,0 +1,9 @@
+# action.yml
+name: 'Update CONTRIBUTORS'
+description: 'Updates contributors file'
+outputs:
+  response: # id of output
+    description: 'Output from command'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

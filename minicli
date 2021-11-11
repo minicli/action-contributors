@@ -1,0 +1,55 @@
+#!/usr/bin/php
+<?php
+
+if(php_sapi_name() !== 'cli') {
+    exit;
+}
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Minicli\App;
+use Minicli\Curly\Client;
+
+$app = new App([
+    'app_path' => __DIR__ . '/app/Command',
+    'repository' => getenv('CONTRIB_REPOSITORY') ?: 'minicli/minicli',
+    'output_file' => getenv('CONTRIB_OUTPUT_FILE') ?: 'CONTRIBUTORS.md'
+]);
+
+$app->registerCommand('update-contributors', function () use ($app) {
+    $app->getPrinter()->info('Fetching top contributors...');
+
+    $client = new Client();
+    $response = $client->get(
+            "https://api.github.com/repos/" . $app->config->repository. "/contributors",
+            ['Accept: application/vnd.github.v3+json', 'User-Agent: Curly']
+    );
+
+    if ($response['code'] != 200) {
+        $app->getPrinter()->error("an error occurred: " . $response['code']);
+        return 1;
+    }
+
+    $content = "#Contributors\n\n";
+    $content .= "Shout out to our top contributors!\n\n";
+
+    foreach (json_decode($response['body']) as $item) {
+        $content .= "- [$item->login]($item->url)\n";
+    }
+
+    try {
+        $contrib_file = fopen($app->config->output_file, 'w+');
+        fwrite($contrib_file, $content);
+        fclose($contrib_file);
+    } catch (Exception $exception) {
+        $app->getPrinter()->error("An error occurred while trying to save the contrib file.");
+        return 1;
+    }
+
+    $app->getPrinter()->success("Finished updating contrib file.");
+    return 0;
+});
+
+$app->runCommand($argv);
+
+//https://api.github.com/repos/scala/scala/contributors?q=contributions&order=desc
