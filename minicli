@@ -30,7 +30,7 @@ $app->registerCommand('update-contributors', function () use ($app) {
         return 1;
     }
 
-    $content = "#Contributors\n\n";
+    $content = "# Contributors\n\n";
     $content .= "Shout out to our top contributors!\n\n";
 
     foreach (json_decode($response['body']) as $item) {
