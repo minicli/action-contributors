@@ -2,7 +2,7 @@
 name: 'Update CONTRIBUTORS'
 description: 'Updates contributors file'
 outputs:
-  response: # id of output
+  response:
     description: 'Output from command'
 runs:
   using: 'docker'

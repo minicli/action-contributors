@@ -51,5 +51,3 @@ $app->registerCommand('update-contributors', function () use ($app) {
 });
 
 $app->runCommand($argv);
-
-//https://api.github.com/repos/scala/scala/contributors?q=contributions&order=desc
