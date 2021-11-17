@@ -20,15 +20,15 @@ jobs:
     steps:
       - uses: minicli/action-contributors@v3
         name: "Update a projects CONTRIBUTORS file"
+        env:
+          CONTRIB_REPOSITORY: 'minicli/minicli'
+          CONTRIB_OUTPUT_FILE: 'CONTRIBUTORS.md'
       - name: Commit changes
         uses: test-room-7/action-update-file@v1
         with:
           file-path: 'CONTRIBUTORS.md'
           commit-msg: Update Contributors
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          CONTRIB_REPOSITORY: 'minicli/minicli'
-          CONTRIB_OUTPUT_FILE: 'CONTRIBUTORS.md'
 ```
 
 
@@ -38,6 +38,7 @@ If you'd prefer to create a pull request instead of committing the changes direc
 you can use the [create-pull-request](https://github.com/marketplace/actions/create-pull-request) action instead. That will require also the [actions/checkout](https://github.com/actions/checkout) GitHub action.
 
 ```yaml
+
 name: Update CONTRIBUTORS file
 on:
   schedule:
@@ -50,13 +51,13 @@ jobs:
       - uses: actions/checkout@v2
       - uses: minicli/action-contributors@v3
         name: "Update a projects CONTRIBUTORS file"
+        env:
+          CONTRIB_REPOSITORY: 'minicli/docs'
+          CONTRIB_OUTPUT_FILE: 'CONTRIBUTORS.md'
       - name: Create a PR
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: Update Contributors
           title: "[automated] Update Contributors File"
           token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          CONTRIB_REPOSITORY: 'minicli/minicli'
-          CONTRIB_OUTPUT_FILE: 'CONTRIBUTORS.md'
 ```
