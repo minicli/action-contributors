@@ -13,7 +13,8 @@ use Minicli\Curly\Client;
 $app = new App([
     'app_path' => __DIR__ . '/app/Command',
     'repository' => getenv('CONTRIB_REPOSITORY') ?: 'minicli/minicli',
-    'output_file' => getenv('CONTRIB_OUTPUT_FILE') ?: 'CONTRIBUTORS.md'
+    'output_file' => getenv('CONTRIB_OUTPUT_FILE') ?: 'CONTRIBUTORS.md',
+    'ignore_users' => [ 'github-actions[bot]' ]
 ]);
 
 $app->registerCommand('update-contributors', function () use ($app) {
@@ -34,7 +35,9 @@ $app->registerCommand('update-contributors', function () use ($app) {
     $content .= "Shout out to our top contributors!\n\n";
 
     foreach (json_decode($response['body']) as $item) {
-        $content .= "- [$item->login]($item->url)\n";
+        if (!in_array($item->login, $app->config->ignore_users)) {
+            $content .= "- [$item->login]($item->html_url)\n";
+        }
     }
 
     try {
