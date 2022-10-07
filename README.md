@@ -26,7 +26,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: minicli/action-contributors@v3.2.2
+      - uses: minicli/action-contributors@v3.2.3
         name: "Update a projects CONTRIBUTORS file"
         env:
           CONTRIB_REPOSITORY: 'minicli/minicli'
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: minicli/action-contributors@v3.2.2
+      - uses: minicli/action-contributors@v3.2.3
         name: "Update a projects CONTRIBUTORS file"
         env:
           CONTRIB_REPOSITORY: 'minicli/docs'
@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: minicli/action-contributors@v3.2.2
+      - uses: minicli/action-contributors@v3.2.3
         name: "Update a projects CONTRIBUTORS file"
         env:
           CONTRIB_REPOSITORY: 'minicli/minicli'
