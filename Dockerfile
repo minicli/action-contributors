@@ -1,19 +1,11 @@
-FROM php:8.0-cli
+FROM minicli/php81-dev:latest AS builder
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libxml2-dev \
-    zip \
-    unzip
+COPY . /home/minicli/
+RUN cd /home/minicli && \
+    composer install --no-progress --no-dev --prefer-dist
 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+FROM minicli/php81:latest
+COPY --from=builder /home/minicli /home/minicli
 
-# Install Composer and set up application
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN mkdir /application
-COPY . /application/
-RUN cd /application && composer install
-
-ENTRYPOINT [ "php", "/application/minicli" ]
+ENTRYPOINT [ "php81", "/home/minicli/minicli" ]
 CMD ["update-contributors"]

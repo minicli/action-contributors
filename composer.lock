@@ -74,8 +74,8 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Minicli\\": "src/",
-                    "Assets\\": "tests/Assets"
+                    "Assets\\": "tests/Assets",
+                    "Minicli\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -109,5 +109,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
