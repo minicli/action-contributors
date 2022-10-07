@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47718ce5a08d7bf5ed90d26735504071",
+    "content-hash": "21e77b9028f05e3fb1d698dec60e3a41",
     "packages": [
         {
             "name": "minicli/curly",
@@ -99,6 +99,50 @@
                 }
             ],
             "time": "2021-10-30T07:30:03+00:00"
+        },
+        {
+            "name": "minicli/stencil",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minicli/stencil.git",
+                "reference": "a328319f68229007b65d286ae2bd77cf2b7b9dca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minicli/stencil/zipball/a328319f68229007b65d286ae2bd77cf2b7b9dca",
+                "reference": "a328319f68229007b65d286ae2bd77cf2b7b9dca",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.5",
+                "pestphp/pest": "^1.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Minicli\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Dummy template generator",
+            "homepage": "https://github.com/minicli/stencil",
+            "keywords": [
+                "minicli",
+                "template"
+            ],
+            "support": {
+                "issues": "https://github.com/minicli/stencil/issues",
+                "source": "https://github.com/minicli/stencil/tree/0.1.1"
+            },
+            "time": "2022-06-21T08:51:47+00:00"
         }
     ],
     "packages-dev": [],
@@ -107,7 +151,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }

@@ -1,6 +1,8 @@
 {
     "require": {
+        "php": "^8.1",
         "minicli/minicli": "^2.2",
-        "minicli/curly": "^0.1.2"
+        "minicli/curly": "^0.1.2",
+        "minicli/stencil": "^0.1.1"
     }
 }

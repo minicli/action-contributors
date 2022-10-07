@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-if(php_sapi_name() !== 'cli') {
+if (php_sapi_name() !== 'cli') {
     exit;
 }
 
@@ -9,28 +9,30 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Minicli\App;
 use Minicli\Curly\Client;
+use Minicli\Stencil;
 
-$contribRepository = getenv('CONTRIB_REPOSITORY');
-
+$ignoreUsers = getenv('CONTRIB_IGNORE') ?: 'github-actions[bot],renovate-bot,dependabot';
 $app = new App([
     'app_path' => __DIR__ . '/app/Command',
-    'repository' => $contribRepository,
+    'repository' => getenv('CONTRIB_REPOSITORY') ?: null,
     'output_file' => getenv('CONTRIB_OUTPUT_FILE') ?: 'CONTRIBUTORS.md',
-    'ignore_users' => [ 'github-actions[bot]' ]
+    'template' => getenv('CONTRIB_TEMPLATE') ?: 'contributors',
+    'ignore_users' => explode(',', $ignoreUsers)
 ]);
 
-if (null === $contribRepository) {
-    $app->getPrinter()->error("CONTRIB_REPOSITORY not set.");
-    return 1;
-}
-
 $app->registerCommand('update-contributors', function () use ($app) {
+
+    if (!$app->config->has('repository')) {
+        $app->getPrinter()->error("Missing CONTRIB_REPOSITORY environment variable.");
+        return 1;
+    }
+
     $app->getPrinter()->info('Fetching top contributors...');
 
     $client = new Client();
     $response = $client->get(
-            "https://api.github.com/repos/" . $app->config->repository. "/contributors",
-            ['Accept: application/vnd.github.v3+json', 'User-Agent: Curly']
+        "https://api.github.com/repos/" . $app->config->repository . "/contributors",
+        ['Accept: application/vnd.github.v3+json', 'User-Agent: Curly']
     );
 
     if ($response['code'] != 200) {
@@ -38,18 +40,24 @@ $app->registerCommand('update-contributors', function () use ($app) {
         return 1;
     }
 
-    $content = "# Contributors\n\n";
-    $content .= "Shout out to our top contributors!\n\n";
+    $stencil = new Stencil(__DIR__);
 
+    $content = "";
     foreach (json_decode($response['body']) as $item) {
         if (!in_array($item->login, $app->config->ignore_users)) {
             $content .= "- [$item->login]($item->html_url)\n";
         }
     }
 
+    $output = $stencil->applyTemplate($app->config->template, [
+        'repo' => $app->config->repository,
+        'content' => $content,
+        'updated' => (new DateTimeImmutable())->format(DateTimeInterface::RFC822)
+    ]);
+
     try {
         $contrib_file = fopen($app->config->output_file, 'w+');
-        fwrite($contrib_file, $content);
+        fwrite($contrib_file, $output);
         fclose($contrib_file);
     } catch (Exception $exception) {
         $app->getPrinter()->error("An error occurred while trying to save the contrib file.");
