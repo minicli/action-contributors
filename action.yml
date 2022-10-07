@@ -1,5 +1,5 @@
 # action.yml
-name: 'Update CONTRIBUTORS'
+name: 'Auto-Update CONTRIBUTORS'
 description: 'Updates contributors file'
 author: 'Erika Heidi'
 branding:
