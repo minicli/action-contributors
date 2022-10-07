@@ -10,12 +10,19 @@ require __DIR__ . '/vendor/autoload.php';
 use Minicli\App;
 use Minicli\Curly\Client;
 
+$contribRepository = getenv('CONTRIB_REPOSITORY');
+
 $app = new App([
     'app_path' => __DIR__ . '/app/Command',
-    'repository' => getenv('CONTRIB_REPOSITORY') ?: 'minicli/minicli',
+    'repository' => $contribRepository,
     'output_file' => getenv('CONTRIB_OUTPUT_FILE') ?: 'CONTRIBUTORS.md',
     'ignore_users' => [ 'github-actions[bot]' ]
 ]);
+
+if (null === $contribRepository) {
+    $app->getPrinter()->error("CONTRIB_REPOSITORY not set.");
+    return 1;
+}
 
 $app->registerCommand('update-contributors', function () use ($app) {
     $app->getPrinter()->info('Fetching top contributors...');
