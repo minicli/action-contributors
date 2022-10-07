@@ -26,7 +26,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: minicli/action-contributors@v3.2.1
+      - uses: minicli/action-contributors@v3.2.2
         name: "Update a projects CONTRIBUTORS file"
         env:
           CONTRIB_REPOSITORY: 'minicli/minicli'
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: minicli/action-contributors@v3.2.1
+      - uses: minicli/action-contributors@v3.2.2
         name: "Update a projects CONTRIBUTORS file"
         env:
           CONTRIB_REPOSITORY: 'minicli/docs'
@@ -90,7 +90,15 @@ The app will pass on the following variables to the template, which you can use 
 - `content`: the full list of contributors
 - `updated`: date and time the file was generated in RFC822 format
 
-To use a custom template, create a `.tpl` file based on the default template and include the `CONTRIB_TEMPLATE` env var to your workflow. This file must be committed to the same repository where the workflow is defined.
+To use a custom template, create a `.tpl` file based on the default template.
+Then, include the following environment variables on your workflow:
+
+- `CONTRIB_STENCIL_DIR`: a directory in your workflow repository where you'll have your template(s). Set this as `${{ github.workspace }}/YOUR_DIRECTORY` 
+- `CONTRIB_TEMPLATE`: the name of the file, without the `tpl` extension. Default: `contributors`
+
+This template file must be committed to the same repository where the workflow is defined.
+
+Then, you'll also need to include the `actions/checkout` action to your workflow so that your repo files are available to the GitHub runner when it executes the action.
 
 Here is an example of a workflow that uses a custom template called `mytemplate.tpl`, located in a `.stencil` directory in the repository where the workflow is set:
 
@@ -104,7 +112,8 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: minicli/action-contributors@v3.2.1
+      - uses: actions/checkout@v2
+      - uses: minicli/action-contributors@v3.2.2
         name: "Update a projects CONTRIBUTORS file"
         env:
           CONTRIB_REPOSITORY: 'minicli/minicli'
