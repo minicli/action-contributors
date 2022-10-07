@@ -4,7 +4,7 @@ COPY . /home/minicli/
 RUN cd /home/minicli && \
     composer install --no-progress --no-dev --prefer-dist
 
-FROM minicli:php81-curl
+FROM minicli/php81-curl:latest
 COPY --from=builder /home/minicli /home/minicli
 
 ENTRYPOINT [ "php81", "/home/minicli/minicli" ]
