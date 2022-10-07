@@ -1,6 +1,10 @@
 # action.yml
 name: 'Update CONTRIBUTORS'
 description: 'Updates contributors file'
+author: 'Erika Heidi'
+branding:
+  icon: 'users'
+  color: 'blue'
 outputs:
   response:
     description: 'Output from command'
