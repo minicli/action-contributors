@@ -6,6 +6,7 @@ This GitHub Action updates a CONTRIBUTORS file with the top contributors from th
 
 - CONTRIB_REPOSITORY: The repository you want to pull contributors from. This is mandatory.
 - CONTRIB_OUTPUT_FILE: The file you want to generate, default set to `CONTRIBUTORS.md`.
+- CONTRIB_STENCIL_DIR: Where to find Stencil templates. Default set to `.stencil`.
 - CONTRIB_TEMPLATE: The [stencil](https://github.com/minicli/stencil) template to use - you can use this to customize the generated markdown file. Default set to the included `contributors.tpl` file.
 - CONTRIB_IGNORE: A comma-separated string with users to ignore. Default set to `github-actions[bot],renovate-bot,dependabot`.
 
@@ -91,7 +92,7 @@ The app will pass on the following variables to the template, which you can use 
 
 To use a custom template, create a `.tpl` file based on the default template and include the `CONTRIB_TEMPLATE` env var to your workflow. This file must be committed to the same repository where the workflow is defined.
 
-Here is an example of a workflow that uses a custom template called `mytemplate.tpl`, located at the root of the repository where the workflow is set:
+Here is an example of a workflow that uses a custom template called `mytemplate.tpl`, located in a `.stencil` directory in the repository where the workflow is set:
 
 ```yaml
 name: Update CONTRIBUTORS file
@@ -108,7 +109,8 @@ jobs:
         env:
           CONTRIB_REPOSITORY: 'minicli/minicli'
           CONTRIB_OUTPUT_FILE: 'CONTRIBUTORS.md'
-          CONTRIB_TEMPLATE: ${{ github.workspace }}/mytemplate
+          CONTRIB_STENCIL_DIR: ${{ github.workspace }}/.stencil
+          CONTRIB_TEMPLATE: mytemplate
       - name: Commit changes
         uses: test-room-7/action-update-file@v1
         with:

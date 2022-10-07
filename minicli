@@ -16,6 +16,7 @@ $app = new App([
     'app_path' => __DIR__ . '/app/Command',
     'repository' => getenv('CONTRIB_REPOSITORY') ?: null,
     'output_file' => getenv('CONTRIB_OUTPUT_FILE') ?: 'CONTRIBUTORS.md',
+    'stencil_dir' => getenv('CONTRIB_STENCIL_DIR') ?: __DIR__ . '/.stencil',
     'template' => getenv('CONTRIB_TEMPLATE') ?: 'contributors',
     'ignore_users' => explode(',', $ignoreUsers)
 ]);
@@ -40,7 +41,7 @@ $app->registerCommand('update-contributors', function () use ($app) {
         return 1;
     }
 
-    $stencil = new Stencil(__DIR__);
+    $stencil = new Stencil($app->config->stencil_dir);
 
     $content = "";
     foreach (json_decode($response['body']) as $item) {
